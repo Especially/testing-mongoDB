@@ -1,6 +1,7 @@
 #MongoDB Validation:
-
-~~~~
+//From tutorial -- Actually just ran this in MongoDB Compass copying the entire 'validator' object value into the validator, using moderate validation level.
+// Simply put, the moderation level as moderate allows us to insert items into the database even if there's an error thrown (iirc)
+~~~~ 
 db.runCommand({
     collMod: "account",
     validator: { $jsonSchema: {
