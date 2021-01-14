@@ -1,3 +1,7 @@
+// It was at this point where I realized that I was in a dilemma.
+// The tutorial i was watching was actually using mongoose! and not mongodb, but i had already set up my code, and it was working,
+// but the way that they set up their schema's made it look so fun and exciting, but... since I was already using mongodb, i decided to make my own validation
+// and use classes more in my code, classes are fun!
 class userSchema {
     constructor(payload) {
         this.err = [];
@@ -21,7 +25,6 @@ class userSchema {
         if (typeof (item) !== options.type) {
             if (options.aggregateErr) {
                 this.err.push({ item: options.name, msg: `Expected a(n) ${options.type}, received ${typeof (item)}` });
-                // console.log(this.err);
             }
         }
 
