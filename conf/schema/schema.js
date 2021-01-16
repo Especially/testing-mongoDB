@@ -1,6 +1,9 @@
 // It was at this point where I realized that I was in a dilemma.
 // The tutorial i was watching was actually using mongoose! and not mongodb, but i had already set up my code, and it was working,
 // but the way that they set up their schema's made it look so fun and exciting, but... since I was already using mongodb, i decided to make my own validation
+
+const { accountUtil } = require("../../lib/utils");
+
 // and use classes more in my code, classes are fun and i need to brush up on them, clearly!!
 class userSchema {
     constructor(payload) {
@@ -10,7 +13,7 @@ class userSchema {
         this.render = this.render.bind(this);
         this.data = {
             email: this.validate(payload.email, { type: 'string', name: 'email', required: true,}),
-            password: this.validate(payload.password, { type: 'string', name: 'password', required: true,}),
+            password: this.validate(payload.password, { type: 'password', name: 'password', required: true,}),
             name: this.validate(payload.name, { type: 'string', name: 'name', required: true,}),
             ip: this.validate(payload.ip, { type: 'string', name: 'ip',}),
             created: this.validate(payload.timestamp, { type: 'timestamp', bypass: true, name: 'timestamp',}),
@@ -25,7 +28,7 @@ class userSchema {
 
         // Trim our strings
         if (options.type === 'string') {
-            item = item.trim();
+            item = item ? item.trim() : '';
         }
 
         // Type check
@@ -41,7 +44,15 @@ class userSchema {
                 }
             }
 
+        } else if (options.type === 'password') {
+            let isValidated = accountUtil.validPassword(item);
+            if (isValidated.success) {
+                item = isValidated.payload;
+            } else {
+                this.err.push({item: options.name, payload: isValidated.msg})
+            }
         } else {
+            // Consider switch statement
             // Default behaviour, if type doesn't match
             if (typeof (item) !== options.type) {
                 if (this.aggregateErr) {
@@ -54,6 +65,7 @@ class userSchema {
 
             if (!item) {
                 if (this.aggregateErr) { // If no aggregation throw on first error we see with that specific error rather than an arr.
+                    // This error should take precedence over password validation errors
                     this.err.push({ item: options.name, msg: 'Cannot be empty' });
                 }
             }
@@ -97,6 +109,6 @@ class userSchema {
 
 
 // console.log(new userSchema({ id: 'a', name: 'a', email: 'a', ip: 'a' }).render())
-// console.log(new userSchema({ id: 'a', name: 'a', email: 'a', ip: 5 }).render())
+// console.log(new userSchema({ id: 'a', name: 'a', email: 'a', ip: 'l',password: 'aaaaA3!' }).render())
 
 module.exports.userSchema = userSchema;
