@@ -1,19 +1,27 @@
 const express = require('express');
 const Router = express.Router();
+const { database } = require('../lib/utils');
 
 // Routes
 Router.post('/', (req, res) => {
-    // const data = req.body.
-    // const data = req.body.
-    // const data = req.body.
-    // const data = req.body.
+    const email = req.body.email;
+    const password = req.body.password;
 
-    res.status(201).json({
-        success: true,
-    })
-    res.status(404).json({
-        success: false,
-    })
+    if (email && password) {
+        new database().logIn({email, password})
+        .then(result => {
+            res.status(201).json(result)
+        })
+        .catch(err => {
+            res.status(404).json(err)
+        })
+    } else {
+        res.status(404).json({
+            success: false,
+            msg: "Missing params."
+        })
+    }
+
 })
 
 module.exports = Router;

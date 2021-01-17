@@ -15,9 +15,10 @@ app.use(bodyParser.urlencoded({
 
 // Routes
 const register = require('./routes/register');
+const login = require('./routes/login');
 
 app.use('/api/register', register);
-app.use('/api/login', register);
+app.use('/api/login', login);
 
 app.listen(8080, () => {
     console.log('Server has started on port 8080.')

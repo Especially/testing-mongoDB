@@ -45,7 +45,7 @@ class userSchema {
             }
 
         } else if (options.type === 'password') {
-            let isValidated = accountUtil.validPassword(item);
+            let isValidated = new accountUtil().validPassword(item);
             if (isValidated.success) {
                 item = isValidated.payload;
             } else {
@@ -106,7 +106,6 @@ class userSchema {
         return responseObj;
     }
 }
-
 
 // console.log(new userSchema({ id: 'a', name: 'a', email: 'a', ip: 'a' }).render())
 // console.log(new userSchema({ id: 'a', name: 'a', email: 'a', ip: 'l',password: 'aaaaA3!' }).render())
